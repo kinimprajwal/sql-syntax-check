@@ -1,0 +1,35 @@
+{
+  "manifestVersion": 1,
+  "id": "sql-syntax-check",
+  "name": "SQL Syntax Check",
+  "version": "0.1.0",
+  "publisher": "REPLACE_WITH_YOUR_PUBLISHER_ID",
+  "public": false,
+  "targets": [
+    { "id": "Microsoft.VisualStudio.Services" }
+  ],
+  "description": "Dialect-aware SQL syntax checking (T-SQL, Snowflake) for PR and build validation, before scripts ever hit SQL Server or Snowflake. Open source.",
+  "categories": ["Azure Pipelines"],
+  "repository": {
+    "type": "git",
+    "uri": "REPLACE_WITH_YOUR_GITHUB_REPO_URL"
+  },
+  "icons": {
+    "default": "images/icon.png"
+  },
+  "files": [
+    {
+      "path": "task"
+    }
+  ],
+  "contributions": [
+    {
+      "id": "sql-syntax-check-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": ["ms.vss-distributed-task.tasks"],
+      "properties": {
+        "name": "task"
+      }
+    }
+  ]
+}

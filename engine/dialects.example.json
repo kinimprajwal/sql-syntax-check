@@ -1,0 +1,6 @@
+[
+  { "pattern": "sqlserver/**/*.sql", "dialect": "tsql" },
+  { "pattern": "snowflake/**/*.sql", "dialect": "snowflake" },
+  { "pattern": "**/*.tsql.sql", "dialect": "tsql" },
+  { "pattern": "**/*.snowflake.sql", "dialect": "snowflake" }
+]

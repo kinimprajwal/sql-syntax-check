@@ -1,0 +1,12 @@
+- id: sql-syntax-check
+  name: SQL Syntax Check
+  description: >
+    Blocks the commit if any staged .sql file fails to parse for its
+    dialect (T-SQL / Snowflake). Not tied to Azure DevOps or any specific
+    repo host — runs locally via git, so it works the same whether the
+    remote is Azure DevOps, GitHub, GitLab, or anything else.
+  entry: sql-syntax-check --quiet
+  language: python
+  files: \.sql$
+  # Consumers pass their own --dialect-config / --default-dialect via
+  # 'args' in their .pre-commit-config.yaml — see README for the example.

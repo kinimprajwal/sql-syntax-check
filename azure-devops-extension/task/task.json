@@ -1,0 +1,58 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "b3f2a6d4-6e1a-4b7a-9b3a-5c1e0f2a7d10",
+  "name": "SqlSyntaxCheck",
+  "friendlyName": "SQL Syntax Check",
+  "description": "Dialect-aware SQL syntax checking for T-SQL and Snowflake before deployment",
+  "helpMarkDown": "Checks .sql files for syntax errors using sqlfluff, routed by dialect (T-SQL / Snowflake) via a config file or folder convention.",
+  "category": "Build",
+  "author": "Prajwal",
+  "version": {
+    "Major": 0,
+    "Minor": 1,
+    "Patch": 0
+  },
+  "instanceNameFormat": "SQL Syntax Check",
+  "inputs": [
+    {
+      "name": "sqlPath",
+      "type": "string",
+      "label": "Path to SQL files",
+      "defaultValue": "$(Build.SourcesDirectory)",
+      "required": true,
+      "helpMarkDown": "Directory to scan for .sql files (recursive)."
+    },
+    {
+      "name": "dialectConfigPath",
+      "type": "string",
+      "label": "Dialect config file (optional)",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Path to a JSON file mapping glob patterns to dialects. If omitted, all files use the default dialect below."
+    },
+    {
+      "name": "defaultDialect",
+      "type": "pickList",
+      "label": "Default dialect",
+      "defaultValue": "ansi",
+      "required": true,
+      "options": {
+        "tsql": "SQL Server (T-SQL)",
+        "snowflake": "Snowflake",
+        "ansi": "Generic ANSI SQL"
+      }
+    },
+    {
+      "name": "failOnError",
+      "type": "boolean",
+      "label": "Fail the build on syntax errors",
+      "defaultValue": true,
+      "required": false
+    }
+  ],
+  "execution": {
+    "Node20_1": {
+      "target": "index.js"
+    }
+  }
+}
