@@ -67,7 +67,7 @@ def load_dialect_config(config_path: str) -> list:
       {"pattern": "snowflake/**/*.sql", "dialect": "snowflake"}
     ]
     """
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, "r", encoding="utf-8-sig") as f:
         rules = json.load(f)
     for rule in rules:
         if rule.get("dialect") not in SUPPORTED_DIALECTS:
@@ -133,13 +133,24 @@ def discover_sql_files(paths: list) -> list:
     return sorted(set(found))
 
 
+def safe_relative(path: Path, root: Path) -> str:
+    """Best-effort relative path for display; falls back to the absolute
+    path instead of crashing if the file isn't actually under root."""
+    if not root:
+        return str(path)
+    try:
+        return str(path.relative_to(root))
+    except ValueError:
+        return str(path)
+
+
 def check_file(path: Path, dialect: str, root: Path) -> FileResult:
     linter = Linter(dialect=dialect)
     try:
-        parsed = linter.lint_string(path.read_text(encoding="utf-8", errors="replace"))
+        parsed = linter.lint_string(path.read_text(encoding="utf-8-sig", errors="replace"))
     except Exception as e:  # sqlfluff can raise on truly malformed input
         return FileResult(
-            path=str(path.relative_to(root)) if root else str(path),
+            path=safe_relative(path, root),
             dialect=dialect,
             ok=False,
             violations=[{
@@ -164,7 +175,7 @@ def check_file(path: Path, dialect: str, root: Path) -> FileResult:
                 "description": d.get("description", ""),
             })
 
-    rel = str(path.relative_to(root)) if root else str(path)
+    rel = safe_relative(path, root)
     return FileResult(path=rel, dialect=dialect, ok=len(violations) == 0, violations=violations)
 
 
